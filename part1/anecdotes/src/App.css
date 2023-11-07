@@ -1,0 +1,11 @@
+* {
+  text-align: center;
+  background-color: wheat;
+  font-size: xx-large;
+  margin: 25px, 25px, 25px, 25px;
+}
+
+div {
+  border: navy;
+  margin-top: 100px;
+}
