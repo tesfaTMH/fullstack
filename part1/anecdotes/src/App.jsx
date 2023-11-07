@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 const Button = (props) => {
   return (
-    <button onClick={props.onClick} className='btn btn-sm btn-primary btn-lg'>
+    <button onClick={props.onClick} className='btn btn-sm btn-primary col-xs-5 margin-left'>
       {props.text}
     </button>
   )
@@ -31,6 +31,9 @@ const App = () => {
   let votelist = new Array(anecdotes.length).fill(0)
   const [vote, setVote] = useState(votelist)
 
+  // index of the list with maximum vote 
+  let max_index = vote.indexOf(Math.max(...vote))
+
   const handleClick = () => {
     let rand_num = Math.floor(Math.random()*anecdotes.length)
     setSelected(rand_num)
@@ -45,14 +48,20 @@ const App = () => {
   return (
     <div className='justify-content-center'>
       <div>
+        <h1>Anecdote of the day</h1>
         {anecdotes[selected]}
         <h6>has {vote[selected]} votes</h6>
       </div>
       
       <Button onClick={handleVote} text='Vote' />
-      <br />
-      <br />
+
       <Button onClick={handleClick} text='Next Anecdote' />
+
+      <div>
+        <h1>Anecdote with most votes</h1>
+        {anecdotes[max_index]}
+        <h6>has {vote[max_index]} votes</h6>
+      </div>
     </div>
   )
 }
