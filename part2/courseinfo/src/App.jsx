@@ -1,6 +1,6 @@
 const Header = ({ course }) => <h1>{course}</h1>
 
-const Total = ({ sum }) => <p>Number of exercises {sum}</p>
+const Total = ({ sum }) => <p><b>Total of {sum} exercises</b> </p>
 
 const Part = ({ part }) => 
   <p>
@@ -17,6 +17,8 @@ const Content = ({ parts }) =>
     />
     <Part
       part={parts[2]} 
+    />
+    <Part part={parts[3]}
     />      
   </>
 
@@ -49,11 +51,21 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 3
       }
     ]
   }
 
-  return <Course course={course} />
+  return (
+    <>
+      <Course course={course} />
+      <Total sum={course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises + course.parts[3].exercises} />
+    </>
+  )
 }
 
 export default App
