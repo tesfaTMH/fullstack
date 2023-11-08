@@ -1,6 +1,15 @@
 const Header = ({ course }) => <h1>{course}</h1>
 
-const Total = ({ sum }) => <p><b>Total of {sum} exercises</b> </p>
+const Total = ({ parts }) => {
+  let arrayOfExercises = []
+  for (let i=0; i < parts.length; i++){
+    arrayOfExercises.push(parts[i].exercises)
+  }
+  const sum = arrayOfExercises.reduce((accumulator, currentValue) =>{
+    return accumulator + currentValue
+  }, 0)
+  return <p><b>Total of {sum} exercises</b> </p>
+}
 
 const Part = ({ part }) => 
   <p>
@@ -63,7 +72,7 @@ const App = () => {
   return (
     <>
       <Course course={course} />
-      <Total sum={course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises + course.parts[3].exercises} />
+      <Total parts={course.parts} />
     </>
   )
 }
