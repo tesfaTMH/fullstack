@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
+import AppHello from './AppHello'
+import AppCounter from './AppCounter'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <App />
+  <AppCounter />
 )

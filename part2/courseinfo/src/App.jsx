@@ -1,6 +1,6 @@
 const Header = ({ course }) => <h1>{course}</h1>
-
-const Total = ({ parts }) => {
+// total exercises sum using for loop
+{/*const Total = ({ parts }) => {
   let arrayOfExercises = []
   for (let i=0; i < parts.length; i++){
     arrayOfExercises.push(parts[i].exercises)
@@ -9,19 +9,38 @@ const Total = ({ parts }) => {
     return accumulator + currentValue
   }, 0)
   return <p><b>Total of {sum} exercises</b> </p>
+}*/}
+
+// total exercises sum using reduce
+const Total = ({parts}) => {
+  const sum = parts.reduce((accumulator, currentValue) =>{
+    return accumulator + currentValue.exercises
+  }, 0)
+  return <p><b>Total of {sum} exercises</b> </p>
 }
 
-const Part = ({ part }) => 
+// Part component
+const Part = ({ name, exercises }) => 
   <p>
-    {part.name} {part.exercises}
+    {name} {exercises}
   </p>
 
-const Content = ({ parts }) => {
+// Content component drived from child Part component
+{/*const Content = ({ parts }) => {
   const partComponent = []
   for (let i=0; i < parts.length; i++){
     partComponent.push(<Part part={parts[i]} key={parts[i].id} />)
   }
   return partComponent
+}*/}
+
+// Content component drived from child Part component using map
+const Content = ({ parts }) => {
+  return(<div>
+    {parts.map((partContent, indexPart) => {
+    return (<Part name={partContent.name} exercises={partContent.exercises} key={indexPart} />)
+  })}
+  </div>)
 }
   
 

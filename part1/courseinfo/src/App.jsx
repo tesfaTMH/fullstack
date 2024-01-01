@@ -1,27 +1,36 @@
 // Header component 
-const Header = ({course}) => {
-  return <h1>{course.name}</h1>
+const Header = ({ name }) => {
+  return <h1>{name}</h1>
 }
 
 // Part component for using in Content component
-const Part = ({part, exercises}) => {
+const Part = ({ part, exercises }) => {
   return(<p>{part} {exercises}</p>)
 }
 
 // Content component 
-const Content = ({course}) => {
+const Content = ({ parts }) => {
   return (
     <div>
-      <Part part={course.parts[0].name} exercises={course.parts[0].exercises} />
-      <Part part={course.parts[1].name} exercises={course.parts[1].exercises} />
-      <Part part={course.parts[2].name} exercises={course.parts[2].exercises} />
+      <Part part={parts[0].name} exercises={parts[0].exercises} />
+      <Part part={parts[1].name} exercises={parts[1].exercises} />
+      <Part part={parts[2].name} exercises={parts[2].exercises} />
     </div>
   )
 }
 
+const totalSum = course.parts.reduce((sum, x) =>{
+  return sum + x.exercises
+}, 0)
 // Total component 
-const Total = ({course}) => {
-  return(<p>Number of exercises {course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises}</p>)
+const Total = ({parts}) => {
+  //return(<p>Number of exercises {parts[0].exercises + parts[1].exercises + parts[2].exercises}</p>)
+  
+  return (
+    <div>
+      <p>Number of exercises: {(totalSum)}</p>
+    </div>
+  )
 }
 
 
@@ -47,9 +56,9 @@ function App() {
 
   return (
     <div>
-      <Header course={course} />
-      <Content course={course} />
-      <Total course={course} />     
+      <Header name={course.name} />
+      <Content parts={course.parts} />
+      <Total parts={course.parts} />     
     </div>
   )
 }
