@@ -1,10 +1,8 @@
 import { useState } from "react";
-import Person from "./components/Person";
+import Persons from "./components/Persons";
 import './App.css'
-
-const Search = ({ persons, searchTarget }) => {
-  return (persons.filter(person => person.name.toLowerCase() === searchTarget.name.toLowerCase() ))
-}
+import { Filter } from "./components/Filter";
+import { PersonForm } from "./components/PersonForm";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -40,40 +38,20 @@ const App = () => {
   return (
     <div className="container">
       <h1>Phonebook</h1>
-      <form>
-        <div>
-          <strong>Filter shown with</strong>: <input 
-                              type="text"
-                              value={newSearch}
-                              onChange={(event) => setNewSearch(event.target.value)}
-                              placeholder="Type to search..."  
-                            /> 
-        </div>
-      </form>
-      <div>
-        <h2>Add a new person</h2>
-        <form onSubmit={addPerson}>
-          <div>
-            <strong>Name</strong>: <input 
-                    type="text"
-                    value={newName}
-                    onChange={(event) => setNewName(event.target.value)}
-                    placeholder="Enter your name..."
-                  />
-          </div>
-          <div>
-          <strong>Phone</strong>: <input
-                    type="text"
-                    value={newPhone}
-                    onChange={(event) => setNewPhone(event.target.value)}
-                    placeholder="Enter your phone number..."
-                  />
-          </div>
-          <div>
-            <button type="submit">Add</button>
-          </div>
-        </form>
-      </div>
+      <Filter 
+        newSearch={newSearch} 
+        setNewSearch={setNewSearch} 
+      />
+      
+      <h2>Add a new person</h2>
+      <PersonForm 
+        newName={newName} 
+        setNewName={setNewName} 
+        newPhone={newPhone}
+        setNewPhone={setNewPhone}
+        addPerson={addPerson} 
+      />
+
       <h2>Numbers</h2>
       <div> 
         {persons.filter((nameToSearch) =>{
@@ -83,7 +61,7 @@ const App = () => {
             return nameToSearch
           }
         }).map(person => 
-        <Person key={person.name} person={person} />)}</div>
+        <Persons key={person.name} person={person} />)}</div>
       {console.log(persons)}
     </div>
   )
