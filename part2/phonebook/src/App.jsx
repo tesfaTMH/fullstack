@@ -27,8 +27,8 @@ const App = () => {
     e.preventDefault()
     const personsObj = {
       name: newName,
-      phone: newPhone,
-      id: persons.length + 1
+      number: newPhone,
+      //id: persons.length + 1
     }
     const found = persons.find(person => person.name === personsObj.name)
     if(found){
@@ -36,9 +36,16 @@ const App = () => {
       setNewName('')
       setNewPhone('')
     } else {
-      setPersons(persons.concat(personsObj))
-      setNewName('')
-      setNewPhone('')
+      //setPersons(persons.concat(personsObj))
+      //setNewName('')
+      //setNewPhone('')
+      axios
+          .post('http://localhost:3001/persons', personsObj)
+          .then(resposne => {
+            setPersons([ ...persons, resposne.data])
+            setNewName('')
+            setNewPhone('')
+          })
     }
   }
 
