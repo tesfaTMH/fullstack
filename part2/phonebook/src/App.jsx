@@ -3,7 +3,7 @@ import Persons from "./components/Persons";
 import './App.css'
 import { Filter } from "./components/Filter";
 import { PersonForm } from "./components/PersonForm";
-import axios from "axios";
+import servicePerson from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -14,11 +14,11 @@ const App = () => {
   //useEffect for fetching data from local server
   useEffect(() => {
     console.log('effect')
-    axios
-        .get('http://localhost:3001/persons')
-        .then(response => {
+    servicePerson
+        .getAllPersons()
+        .then(initialPersonList => {
           console.log('promise fullfilled')
-          setPersons(response.data)
+          setPersons(initialPersonList)
         })
   }, [])
   console.log('render', persons.length, 'persons')
@@ -39,10 +39,10 @@ const App = () => {
       //setPersons(persons.concat(personsObj))
       //setNewName('')
       //setNewPhone('')
-      axios
-          .post('http://localhost:3001/persons', personsObj)
-          .then(resposne => {
-            setPersons([ ...persons, resposne.data])
+      servicePerson
+          .createPerson(personsObj)
+          .then(returnedPerson => {
+            setPersons([ ...persons, returnedPerson])
             setNewName('')
             setNewPhone('')
           })
