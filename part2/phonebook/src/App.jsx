@@ -3,6 +3,7 @@ import Persons from "./components/Persons";
 import './App.css'
 import { Filter } from "./components/Filter";
 import { PersonForm } from "./components/PersonForm";
+import axios from "axios";
 import servicePerson from './services/persons'
 
 const App = () => {
@@ -49,7 +50,17 @@ const App = () => {
     }
   }
 
-
+  const deletePerson = (id) => {
+    if (window.confirm(`Are sure you want to delete the person with ID ${id}?`)){
+      servicePerson
+        .deleteP(id)
+        .then(returnedPerson => {
+          console.log(returnedPerson)
+          setPersons(persons.filter(person => person.id !== id))
+        })
+    }
+  }
+  
   return (
     <div className="container">
       <h1>Phonebook</h1>
@@ -76,7 +87,7 @@ const App = () => {
             return nameToSearch
           }
         }).map(person => 
-        <Persons key={person.name} person={person} />)}</div>
+        <Persons key={person.name} person={person} deletePerson={deletePerson} />)}</div>
       {console.log(persons)}
     </div>
   )

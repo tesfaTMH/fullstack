@@ -7,9 +7,14 @@ const getAllPersons = () => {
     return request.then(response => response.data)
 }
 
-const createPerson = () => {
-    const request = axios.post(baseUrl, newObject)
+const createPerson = (personsObj) => {
+    const request = axios.post(baseUrl, personsObj)
     return request.then(response => response.data)
 }
 
-export default { getAllPersons, createPerson }
+const deleteP = (id) => {
+    const request = axios.delete(`${baseUrl}/${id}`)
+    return request.then(response => response.data)
+}
+
+export default { getAllPersons, createPerson, deleteP }
