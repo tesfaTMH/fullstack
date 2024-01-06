@@ -17,4 +17,9 @@ const deleteP = (id) => {
     return request.then(response => response.data)
 }
 
-export default { getAllPersons, createPerson, deleteP }
+const updateP = (id, updateNumber) => {
+    const request = axios.put(`${baseUrl}/${id}`, updateNumber)
+    return request.then(response => response.data)
+}
+
+export default { getAllPersons, createPerson, deleteP, updateP }
