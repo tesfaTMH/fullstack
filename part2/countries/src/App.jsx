@@ -6,6 +6,11 @@ import { CountryInformation } from './components/CountryInformation'
 function App() {
   const [countries, setCountries] = useState([])
   const [searchCountry, setSearchCountry] = useState('')
+  const [isShow, setIsShow] = useState(false)
+
+  const toggleShow = ({country}) => {
+    setIsShow(isShow => !isShow)
+  }
 
   useEffect(() => {
     axios
@@ -35,11 +40,15 @@ function App() {
       </div>
       <div>
         {searchCountry === ' ' ? [ ]
-        : filteredSearch.length > 10 
+        : filteredSearch.length > 5
         ? <p>Too many search results, add more charcters to narrow the search</p>
         : filteredSearch.map(country =>(
-        filteredSearch.length <= 10 && filteredSearch.length > 1
-        ? <p key={country.cca2}>{country.name.common}</p>
+        filteredSearch.length <= 5 && filteredSearch.length > 1
+        ? <div key={country.cca2}>
+          {country.name.common}
+          <button key={country.cca2} onClick={() => setIsShow(!isShow)}>{isShow ? 'HIDE' : 'SHOW'}</button> 
+          {isShow && <CountryInformation key={country.cca2} countryInfo={country} />} 
+        </div>
         : <CountryInformation key={country.cca2} countryInfo={country} />))}
       </div>
     </div>
