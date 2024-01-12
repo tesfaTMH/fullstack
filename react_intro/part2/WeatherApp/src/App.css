@@ -1,0 +1,19 @@
+*{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+}
+
+body{
+  display: block;
+  text-align: center;
+}
+.city-name{
+  font-size: 1.5rem;
+}
+
+.weather-status{
+  font-weight: 500;
+  color: blanchedalmond;
+}
