@@ -1,8 +1,24 @@
 const express = require('express')
+const morgan = require('morgan')
 
 app = express()
 
 app.use(express.json())
+//minimal logging output using predefined tiny
+//app.use(morgan('tiny'))
+
+//token for host
+morgan.token('host', (req, res) => {
+  return req.hostname
+})
+//use host parameter for customized logging output
+//app.use(morgan(':method :host :status :res[content-length] - :response-time ms'))
+
+//use host parameter and token argument for customized logging output
+app.use(morgan(':method :host :url :status :param[id] :res[content-length] - :response-time ms'))
+morgan.token('param', (req, res, param) => {
+  return req.params[param]
+})
 
 const persons = [
     { 
