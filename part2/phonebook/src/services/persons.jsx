@@ -2,7 +2,10 @@ import axios from "axios";
 
 //const baseUrl = 'http://localhost:3001/persons'
 
-const baseUrl = 'http://localhost:3001/api/persons'
+//const baseUrl = 'http://localhost:3001/api/persons'
+
+// define a relative url for fly.io since frontend and backend have the same address after deployment
+const baseUrl = '/api/persons'
 
 const getAllPersons = () => {
     const request = axios.get(baseUrl)
