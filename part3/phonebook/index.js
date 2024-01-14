@@ -1,9 +1,12 @@
 const express = require('express')
 const morgan = require('morgan')
+//middleware to use and allow for requests from all origins
+const cors = require('cors')
 
 app = express()
 
 app.use(express.json())
+app.use(cors())
 //minimal logging output using predefined tiny
 //app.use(morgan('tiny'))
 
@@ -105,7 +108,7 @@ app.post('/api/persons', (req, res) => {
 
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
