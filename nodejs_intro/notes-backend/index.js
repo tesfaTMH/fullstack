@@ -1,7 +1,11 @@
 const express = require('express')
 const cors = require('cors')
+require('dotenv').config()
+
 
 const app = express()
+const Note = require('./models/note')
+
 app.use(express.json())
 app.use(cors())
 
@@ -19,7 +23,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(requestLogger)
 
-let notes = [
+{/*let notes = [
     {
       id: 1,
       content: "HTML is easy",
@@ -36,15 +40,19 @@ let notes = [
       important: true
     }
   ]
+*/}
 
 app.get('/', (req, res) => {
     res.send('<h1>Hello World!</h1>')
 })
 
 app.get('/api/notes', (req, res) => {
-    res.json(notes)
+    Note.find({}).then(notes => {
+        res.json(notes)
+    })
 })
 
+{/*
 app.get('/app/notes/:id', (req, res) => {
     const id = Number(req.params.id)
 
@@ -55,6 +63,14 @@ app.get('/app/notes/:id', (req, res) => {
     } else {
         res.status(404).end()
     }
+})
+*/}
+
+// get by ID from mongodb
+app.get('/api/notes/:id', (request, response) => {
+    Note.findById(request.params.id).then(note => {
+      response.json(note)
+    })
 })
 
 app.delete('/app/notes/:id', (req, res) => {
@@ -72,7 +88,7 @@ const generateId = () => {
     return maxId + 1
 }
 
-app.post('/app/notes', (req, res) => {
+{/*app.post('/app/notes', (req, res) => {
     const body = req.body
 
     if(!body.content){
@@ -92,10 +108,29 @@ app.post('/app/notes', (req, res) => {
 
     res.json(note)
 })
+*/}
+
+// post method for data from mongodb
+app.post('/api/notes', (req, res) => {
+    const body = req.body
+
+    if (body === undefined){
+        return res.status(400).json({ error: 'Content missing' })
+    }
+
+    const note = new Note({
+        content: body.content,
+        important: body.important || false,
+    })
+
+    note.save().then(savedNote => {
+        res.json(savedNote)
+    })
+})
 
 app.use(unknownEndpoint)
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)

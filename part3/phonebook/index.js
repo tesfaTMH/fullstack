@@ -2,6 +2,10 @@ const express = require('express')
 const morgan = require('morgan')
 //middleware to use and allow for requests from all origins
 const cors = require('cors')
+//middleware for defining enviroment variables 
+require('dotenv').config()
+
+const People = require('./models/people')
 
 app = express()
 
@@ -111,7 +115,7 @@ app.post('/api/persons', (req, res) => {
 
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
