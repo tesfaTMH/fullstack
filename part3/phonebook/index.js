@@ -6,7 +6,6 @@ const cors = require('cors')
 require('dotenv').config()
 
 const Person = require('./models/person')
-const person = require('./models/person')
 
 app = express()
 
@@ -30,6 +29,26 @@ app.use(morgan(':method :host :url :status :res[content-length] - :response-time
 //morgan.token('param', (req, res, param) => {
 //  return req.params[param]
 //})
+
+// middleware for error handling 
+const errorHandler = (error, req, res, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError' ) {
+    return res.status(400).send({
+      error: 'malformatted id'
+    })
+
+    next(error)
+  }
+}
+
+//unknown endpoint handler 
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({
+    error: 'unknown endpoint'
+  })
+}
 
 {/*const persons = [
     { 
@@ -67,7 +86,7 @@ app.get('/api/persons', (req, res) => {
   })
 })
 
-app.get('/info', (req, res) => {
+{/*app.get('/info', (req, res) => {
   const dateToday = new Date()
   res.send(`
             <h1>Phonebook has info for ${persons.length} persons</h1>
@@ -75,7 +94,7 @@ app.get('/info', (req, res) => {
         `)
 })
 
-{/*app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res) => {
   const id = Number(req.params.id)
   const person = persons.find(person => person.id === id)
   
@@ -99,23 +118,31 @@ app.get('/api/persons/:id', (req, res) => {
       }
     })
     .catch(error => {
-      console.log(error)
-      res.status(400).send({ error: 'malformatted id' })
+      next(error)
     })
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+{/*app.delete('/api/persons/:id', (req, res) => {
   const id = Number(req.params.id)
   persons = persons.filter(person => person.id !== id)
 
   res.status(204).end()
 })
+*/}
+// delete person from MongoDB 
+app.delete('/api/persons/:id', (req, res, next) => {
+  Person.findByIdAndDelete(req.params.id)
+    .then(result => {
+      res.status(204).end()
+    })
+    .catch(error => next(error))
+})
 
-const randomId = () => {
+{/*const randomId = () => {
   return Math.floor(Math.random()) + persons.length
 }
 
-{/*app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res) => {
   const body = req.body
 
   const found = persons.find(person => person.name === body.name)
@@ -142,7 +169,7 @@ const randomId = () => {
 
 })
 */}
-
+// add person to phonebook MongoDB
 app.post('/api/persons', (req, res) => {
   const body = req.body
 
@@ -151,7 +178,6 @@ app.post('/api/persons', (req, res) => {
   }
 
   const person = new Person({
-    id: randomId(),
     name: body.name,
     number: body.number,
   })
@@ -160,6 +186,25 @@ app.post('/api/persons', (req, res) => {
     res.json(savedPerson)
   })
 })
+
+//update person in MongoDB
+app.put('/api/persons/:id', (req, res, next) => {
+  const body = req.body
+
+  const person = {
+    name: body.name,
+    number: body.number,
+  }
+
+  Person.findByIdAndUpdate(req.params.id, person, { new: true })
+    .then(updatedPerson => {
+      res.json(updatedPerson)
+    })
+    .catch(error => next(error))
+})
+
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 
