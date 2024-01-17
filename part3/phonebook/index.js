@@ -169,28 +169,34 @@ app.post('/api/persons', (req, res) => {
 
 })
 */}
-// add person to phonebook MongoDB
-app.post('/api/persons', (req, res) => {
-  const body = req.body
 
-  if (body.name === undefined || body.number === undefined){
-    return res.status(400).json({ error: 'Incomplete person information either name or number is missing'})
+// add person to phonebook MongoDB
+app.post('/api/persons', async (req, res) => {
+  const body = req.body
+  const query = { name: body.name }
+  
+  if (body.name === undefined || body.number ===undefined){
+    return res.status(400).json({
+      error: 'person info missing. Check if name and phone number are defined'
+    })
   }
 
-  const person = new Person({
+  const person = {
     name: body.name,
     number: body.number,
-  })
-
-  person.save().then(savedPerson => {
-    res.json(savedPerson)
-  })
+  }
+  // Checks if name exist. If exists update number else create a new phoonebook entry
+  Person.findOneAndUpdate(query, person, { new: true, upsert: true })
+      .then(updatedPerson => {
+        res.json(updatedPerson)
+      })
+      .catch(error => next(error))
 })
 
 //update person in MongoDB
 app.put('/api/persons/:id', (req, res, next) => {
   const body = req.body
-
+  
   const person = {
     name: body.name,
     number: body.number,
