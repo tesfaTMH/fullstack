@@ -18,7 +18,11 @@ mongoose.connect(url)
   })
 
 const noteSchema = new mongoose.Schema({
-  content: String,
+  content: {
+    type: String,
+    minLength: [5, 'Content should be at least 5 characters'],
+    required: [true, 'Enter content']
+  },
   important: Boolean,
 })
 
